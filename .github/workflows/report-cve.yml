@@ -1,0 +1,29 @@
+name: report-on-vulnerabilities
+
+on:
+    pull_request:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: backend-devops
+
+jobs:
+    scan:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Scan for vulnerabilities in latest image
+          uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37
+          with:
+            image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            format: sarif
+            ignore-unfixed: false
+            severity: HIGH,CRITICAL
+            output: trivy-results.sarif
+          env:
+            TRIVY_DB_REPOSITORY: 'public.ecr.aws/aquasecurity/trivy-db:2'
+
+        - name: Upload SARIF to GitHub
+          uses: github/codeql-action/upload-sarif@v3
+          with:
+            sarif_file: trivy-results.sarif
+    
