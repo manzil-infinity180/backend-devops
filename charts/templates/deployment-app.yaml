@@ -30,4 +30,4 @@ spec:
               configMapKeyRef:
                 name: postgres-secret
                 key: POSTGRES_PASSWORD
-      
+    

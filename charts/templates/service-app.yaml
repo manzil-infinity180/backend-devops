@@ -1,0 +1,13 @@
+apiVersion: v1 
+kind: Service
+metadata:
+  name: backend-devops-svc
+  labels:
+    app: backend-devops
+spec:
+  selector:
+    app: backend-devops
+  ports:
+    - port: 8000 
+      protocol: TCP
+      targetPort: 8000
