@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-devops-depl
+  labels:
+    app: backend-devops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-devops
+  template:
+    metadata:
+      labels:
+        app: backend-devops
+    spec:
+      containers:
+        - name: backend-devops
+          image: ghcr.io/manzil-infinity180/backend-devops:latest
+    
