@@ -1,10 +1,11 @@
 package db
 
 import (
-	"github.com/go-pg/migrations/v8"
-	"github.com/go-pg/pg/v10"
 	"log"
 	"os"
+
+	"github.com/go-pg/migrations/v8"
+	"github.com/go-pg/pg/v10"
 )
 
 func StartDb() (*pg.DB, error) {
@@ -12,17 +13,14 @@ func StartDb() (*pg.DB, error) {
 		opts *pg.Options
 		err  error
 	)
-	if os.Getenv("ENV") == "PROD" {
-		_, err := pg.ParseURL(os.Getenv("DATABASE_URL"))
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		opts = &pg.Options{
-			Addr:     "db:5432",
-			User:     "postgres",
-			Password: "postgres",
-		}
+	host := os.Getenv("DB_HOST")
+	if host == "" {
+		host = "localhost:5432" // or default to something
+	}
+	opts = &pg.Options{
+		Addr:     host,
+		User:     os.Getenv("DB_USER"),
+		Password: os.Getenv("DB_PASSWORD"),
 	}
 	// helps you to connect
 	db := pg.Connect(opts)
